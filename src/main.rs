@@ -1,12 +1,74 @@
 use std::time::Instant;
-
+use std::collections::LinkedList;
 fn main() {
-    _first_test();
+    // _linked_list_vs_vec();
+    linked_list_vs_vec_using_ll();
+    // _first_test();
     // _copy_from_slice_test_set();
     // _run_a_lot_forwards();
     // print!("\n");
     // _run_a_lot_backwards();
 }
+
+// Results    :
+// Linked List: 0.5148971
+// Vector Fair: 0.0199759
+// Vector Fast Copy: 0.0000001
+fn _linked_list_vs_vec() {
+    //Testing how long it takes to add variable using vectors
+    let big_vec_source: Vec<i32> = vec![0; 10_000_000];
+    let mut ll: LinkedList<i32> = LinkedList::new();
+
+    let now = Instant::now();
+    big_vec_source.iter().for_each(|x: &i32| ll.push_back(*x));
+    let a = now.elapsed().as_secs_f32();
+
+    let big_vec_source: Vec<i32> = vec![0; 10_000_000];
+    let mut v1: Vec<i32> = Vec::<i32>::new();
+
+    let now = Instant::now();
+    big_vec_source.iter().for_each(|x: &i32| v1.push(*x));
+    let b = now.elapsed().as_secs_f32();
+
+    let big_vec_source: Vec<i32> = vec![0; 10_000_000];
+    let mut v2: Vec<i32> = vec![1;10_000_000];
+
+    let now = Instant::now();
+    v2.copy_from_slice(&big_vec_source);
+
+    let c = now.elapsed().as_secs_f32();
+    println!("Linked List: {}\nVector Fair: {}\nVector Fast Copy: {}",a,b,c)
+}
+
+// Results    :
+// Linked List: 0.5716007
+// Vector Fair: 0.1087586
+fn linked_list_vs_vec_using_ll() {
+    //Testing how long it takes to add variable using linked list
+
+    let big_vec_source: Vec<i32> = vec![0; 10_000_000];
+    let mut ll_vec_sec: LinkedList<i32> = LinkedList::new();
+    big_vec_source.iter().for_each(|x: &i32| ll_vec_sec.push_back(*x));
+
+    
+    let mut ll: LinkedList<i32> = LinkedList::new();
+    let now = Instant::now();
+    ll_vec_sec.iter().for_each(|x| ll.push_back(*x));
+    let a = now.elapsed().as_secs_f32();
+
+    let big_vec_source: Vec<i32> = vec![0; 10_000_000];
+    let mut ll_vec_sec: LinkedList<i32> = LinkedList::new();
+    big_vec_source.iter().for_each(|x: &i32| ll_vec_sec.push_back(*x));
+
+    let mut v = Vec::<i32>::new();
+
+    let now = Instant::now();
+    ll_vec_sec.iter().for_each(|x: &i32| v.push(*x));
+    let b = now.elapsed().as_secs_f32();
+
+    println!("Linked List: {}\nVector Fair: {}",a,b)
+}
+
 
 //Returns:
 // At 10000: Speed up is 25.3137x faster
